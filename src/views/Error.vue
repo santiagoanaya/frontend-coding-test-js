@@ -6,16 +6,18 @@
 </template>
 
 <script setup>
-defineProps(
-  {
-    title: String,
-    message: String,
-    statusCode: Number,
-  },
-  {
-    title: 'Not Found',
-    message: "We're sorry, but this page doesn't exist.",
-    statusCode: 404,
-  },
-)
+  const props = defineProps({
+    title: {
+      type: String,
+      default: 'Error'
+    },
+    message: {
+      type: String,
+      default: "An error occurred."
+    },
+    statusCode: {
+      type: Number,
+      default: 404
+    }
+  });
 </script>
