@@ -15,6 +15,16 @@ const mockPokemons = [
     },
     types: [{ type: { name: 'grass' } }, { type: { name: 'poison' } }],
   },
+  {
+    name: 'ivysaur',
+    height: 10,
+    weigth: 130,
+    sprites: {
+      front_default:
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
+    },
+    types: [{ type: { name: 'grass' } }, { type: { name: 'poison' } }],
+  },
 ]
 
 describe('PokemonList.vue', () => {
@@ -115,5 +125,58 @@ describe('PokemonList.vue', () => {
     })
 
     expect(wrapper.text()).toContain('No Pokemons available')
+  })
+
+  it('displays correct number of pokemon items', async () => {
+    const mockToast = { triggerToast: jest.fn() }
+    const wrapper = mount(PokemonList, {
+      global: {
+        plugins: [store, router],
+        provide: {
+          toast: mockToast,
+        },
+        stubs: { Loader },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+
+    const items = wrapper.findAll('.pokemon-item')
+    expect(items.length).toBe(store.state.pokemons.length)
+  })
+
+  it('hides loader after pokemons are loaded', async () => {
+    const mockToast = { triggerToast: jest.fn() }
+    const wrapper = mount(PokemonList, {
+      global: {
+        plugins: [store, router],
+        provide: {
+          toast: mockToast,
+        },
+        stubs: { Loader },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.findComponent(Loader).exists()).toBe(false)
+  })
+  it('navigates to Pokemon detail page on item click', async () => {
+    const mockToast = { triggerToast: jest.fn() }
+    const wrapper = mount(PokemonList, {
+      global: {
+        plugins: [store, router],
+        provide: {
+          toast: mockToast,
+        },
+        stubs: { Loader },
+      },
+    })
+
+    await wrapper.findAll('.pokemon-item')[0].trigger('click')
+    expect(router.push).toHaveBeenCalledWith({
+      name: 'PokemonDetail',
+      params: { name: mockPokemons[0].name },
+    })
   })
 })

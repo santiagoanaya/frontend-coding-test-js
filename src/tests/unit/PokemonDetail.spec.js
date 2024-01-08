@@ -1,6 +1,11 @@
 import { mount } from '@vue/test-utils'
 import { createStore } from 'vuex'
-import { createRouter, createMemoryHistory } from 'vue-router'
+import {
+  createRouter,
+  createMemoryHistory,
+  useRoute,
+  useRouter,
+} from 'vue-router'
 import Loader from '@/components/Loader.vue'
 import PokemonDetail from '@/components/PokemonDetail.vue'
 
@@ -86,5 +91,52 @@ describe('PokemonDetail.vue', () => {
     })
 
     expect(wrapper.text()).toContain('No Pokemon Found')
+  })
+  it('formats pokemon types correctly', async () => {
+    const wrapper = mount(PokemonDetail, {
+      global: {
+        plugins: [store, router],
+        provide: {
+          toast: { triggerToast: jest.fn() },
+        },
+        stubs: { Loader },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('GRASS, POISON')
+  })
+
+  it('displays height in cm', async () => {
+    const wrapper = mount(PokemonDetail, {
+      global: {
+        plugins: [store, router],
+        provide: {
+          toast: { triggerToast: jest.fn() },
+        },
+        stubs: { Loader },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('Height: 70 cm')
+  })
+
+  it('displays weight in kg', async () => {
+    const wrapper = mount(PokemonDetail, {
+      global: {
+        plugins: [store, router],
+        provide: {
+          toast: { triggerToast: jest.fn() },
+        },
+        stubs: { Loader },
+      },
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('Weight: 6.9 kg')
   })
 })
