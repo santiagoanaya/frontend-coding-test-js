@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h2>Pokémon List</h2>
-    <ul>
+    <h1>Pokemon List</h1>
+    <div v-if="isLoading"><h2>Loading...</h2></div>
+    <ul v-else>
       <li v-for="pokemon in pokemons" :key="pokemon.name">
         <router-link
           :to="{ name: 'PokemonDetail', params: { name: pokemon.name } }"
@@ -14,17 +15,16 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import PokemonService from '../services/PokemonService'
+import { onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 
-const pokemons = ref([])
+const store = useStore()
+const pokemons = computed(() => store.state.pokemons)
+const isLoading = computed(() => store.state.isLoading)
 
-onMounted(async () => {
-  try {
-    const response = await PokemonService.getPokemons()
-    pokemons.value = response.data.results
-  } catch (error) {
-    console.error(error)
+onMounted(() => {
+  if (store.state.pokemons.length === 0) {
+    store.dispatch('fetchPokemons')
   }
 })
 </script>
