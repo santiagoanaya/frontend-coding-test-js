@@ -31,11 +31,16 @@
       </div>
     </div>
   </nav>
-  <main class="flex justify-center">
+  <main :class="{ 'flex justify-center': shouldCenterContent }">
     <router-view />
   </main>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const shouldCenterContent = computed(() => route.name !== 'PokemonList')
 const props = defineProps(['name'])
 </script>
