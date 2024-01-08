@@ -1,5 +1,5 @@
 <template>
-  <div class="pokemon-list-wrapper">
+  <div v-if="pokemons && pokemons.length > 0" class="pokemon-list-wrapper">
     <h1 class="pokemon-list-title">Pokemon List</h1>
     <div v-if="isLoading"><Loader /></div>
     <div v-else class="pokemon-grid">
@@ -12,6 +12,9 @@
         {{ pokemon.name }}
       </div>
     </div>
+  </div>
+  <div v-else>
+    <h1 class="pokemon-list-title">No Pokemons available</h1>
   </div>
 </template>
 
@@ -34,7 +37,7 @@ onMounted(async () => {
       triggerToast('Pokemons fetched successfully', 'success')
     } catch (error) {
       triggerToast('Error fetching Pokemons', 'error')
-      triggerToast(`Description: ${error}`, 'error')
+      triggerToast(`Description: ${error.message}`, 'error')
     }
   }
 })

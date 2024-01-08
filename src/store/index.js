@@ -28,6 +28,7 @@ export default createStore({
       } catch (error) {
         console.error(error)
         commit('setLoading', false)
+        throw error;
       }
     },
     async fetchPokemon({ commit }, name) {
