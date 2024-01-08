@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, inject } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import Loader from './Loader.vue'
@@ -25,10 +25,17 @@ const store = useStore()
 const router = useRouter()
 const pokemons = computed(() => store.state.pokemons)
 const isLoading = computed(() => store.state.isLoading)
+const { triggerToast } = inject('toast')
 
-onMounted(() => {
+onMounted(async () => {
   if (store.state.pokemons.length === 0) {
-    store.dispatch('fetchPokemons')
+    try {
+      await store.dispatch('fetchPokemons')
+      triggerToast('Pokemons fetched successfully', 'success')
+    } catch (error) {
+      triggerToast('Error fetching Pokemons', 'error')
+      triggerToast(`Description: ${error}`, 'error')
+    }
   }
 })
 

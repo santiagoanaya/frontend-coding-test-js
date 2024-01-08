@@ -25,19 +25,25 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { computed } from 'vue'
 import Loader from './Loader.vue'
 
 const store = useStore()
 const route = useRoute()
 const pokemon = computed(() => store.getters.selectedPokemon)
 const isLoading = computed(() => store.state.isLoading)
+const { triggerToast } = inject('toast')
 
-onMounted(() => {
-  store.dispatch('fetchPokemon', route.params.name)
+onMounted(async () => {
+  try {
+    await store.dispatch('fetchPokemon', route.params.name)
+    triggerToast(`${route.params.name} fetched successfully`, 'success')
+  } catch (error) {
+    triggerToast(`Error fetching ${route.params.name}`, 'error')
+    triggerToast(`Description: ${error}`, 'error')
+  }
 })
 
 const formattedTypes = computed(() => {
