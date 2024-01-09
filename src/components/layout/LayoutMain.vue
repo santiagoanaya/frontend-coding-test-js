@@ -18,7 +18,7 @@
                 >Home</router-link
               >
             </div>
-            <div class="flex space-x-4">
+            <div class="flex ml-8 space-x-4">
               <router-link
                 to="/pokemons"
                 class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"

@@ -4,6 +4,7 @@ import App from './App.vue'
 import initializeRouter from './router'
 import store from './store'
 import { useToast } from './composables/useToast'
+import 'leaflet/dist/leaflet.css'
 
 const app = createApp(App)
 
